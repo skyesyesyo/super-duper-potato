@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Dashboard of Secrets</title>
+	</head>
+	<body>
+
+		<h1>Hello {{user.first_name}}!</h1>
+
+		<form action="/secrets/create" method="POST">
+			<textarea name="content"></textarea>
+			<input type="submit" value="POST">
+			{% csrf_token %}
+		</form>
+
+		<h2><a href="/secrets">Most popular Secrets</a></h2>
+
+		<h1>Recent Secrets...</h1>
+<!-- {{secret.like__count}} gives number of like -->
+		{% for secret in secrets %}
+			<p>{{secret.content}} ({{secret.created_at}}) {{secret.like__count}} likes
+
+			{% if secret.user_id == user.id %}
+				<strong>You posted this</strong> <a href="/secrets/{{secret.id}}/delete">Delete</a>
+			{% elif secret.already_liked %}
+				<strong>You liked this</strong>
+			{% else %}
+				<a href="/secrets/{{secret.id}}/like">Like</a></p>
+			{% endif %}
+		{% endfor %}
+	</body>
+</html>
